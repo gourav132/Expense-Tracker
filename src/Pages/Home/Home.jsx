@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import BounceLoader from "react-spinners/ClipLoader";
 
 export default function Home() {
   const [toggleModal, setToggleModal] = useState(false);
   const [formData, setFormData] = useState({});
   const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm();
   const formRef = useRef(null);
+  const [ loading, setLoading ] = useState(false);
 
   const handleModal = () => {
     setToggleModal(!toggleModal);
@@ -24,20 +26,21 @@ export default function Home() {
   };
 
   const addToGoogleSheet = () => {
+    setLoading(!loading);
     const formData = new FormData(formRef.current);
     console.log(Object.fromEntries(formData));
     fetch(
-      // "https://script.google.com/macros/s/AKfycbzpcfTyltwwl2Amzmc76_c8QacUNrx-NacJxq4rGZf03BmOJjOdPJUlX8UgHhoxeCut/exec",
       process.env.REACT_APP_GOOGLE_SHEET_API,
       {
         method: "POST",
         body: formData
       }
     )
-      .then((res) => {
-        reset();
-        handleModal();
-        handleToasts();
+    .then((res) => {
+      reset();
+      handleModal();
+      handleToasts();
+      setLoading(!loading);
       })
       .catch((error) => {
         console.log(error);  // Handling errors
@@ -123,7 +126,15 @@ export default function Home() {
                 className="rounded-md bg-green-700 px-4 py-1 font-semibold text-white hover:bg-green-600 transition-colors"
                 onClick={addToGoogleSheet}
               >
-                Submit
+                {loading? 
+                <BounceLoader
+                color="#ffffff"
+                // loading={loading}
+                // cssOverride={override}
+                size={15}
+                aria-label="Loading Spinner"
+                data-testid="loader" 
+        /> : "Submit" } 
               </button>
             </div>
           </div>
