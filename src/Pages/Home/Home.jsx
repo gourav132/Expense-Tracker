@@ -60,7 +60,7 @@ export default function Home() {
         <p className="text-sm font-semibold text-gray-400 mt-1 text-center">Keep track of all the expenses in a <span className='block md:inline'>seamless manner</span></p>
 
         <div className="mt-10">
-          <label className="block font-semibold dark:text-gray-300 text-gray-600" htmlFor="category">Category</label>
+          <label className="block dark:text-gray-100 text-sm font-medium leading-6 text-gray-900" htmlFor="category">Category</label>
           <select
             {...register('Category', { required: 'Category is required' })}
             className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
@@ -73,7 +73,7 @@ export default function Home() {
         </div>
 
         <div className="mt-3">
-          <label className="block font-semibold dark:text-gray-300 text-gray-600" htmlFor="description">Description</label>
+          <label className="block dark:text-gray-100 text-sm font-medium leading-6 text-gray-900" htmlFor="description">Description</label>
           <textarea
             {...register('Description', { required: 'Description is required' })}
             className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
@@ -83,7 +83,7 @@ export default function Home() {
         </div>
 
         <div className="mt-2">
-          <label className="block font-semibold dark:text-gray-300 text-gray-600" htmlFor="amt">Amount</label>
+          <label className="block dark:text-gray-100 text-sm font-medium leading-6 text-gray-900" htmlFor="amt">Amount</label>
           <input
             type="number"
             id="amt"
