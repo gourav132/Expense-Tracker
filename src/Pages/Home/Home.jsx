@@ -63,7 +63,7 @@ export default function Home() {
           <label className="block font-semibold dark:text-gray-300 text-gray-600" htmlFor="category">Category</label>
           <select
             {...register('Category', { required: 'Category is required' })}
-            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-800 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
           >
             <option value="">Select a category</option>
             <option value="transportation">Transportation</option>
@@ -76,7 +76,7 @@ export default function Home() {
           <label className="block font-semibold dark:text-gray-300 text-gray-600" htmlFor="description">Description</label>
           <textarea
             {...register('Description', { required: 'Description is required' })}
-            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-800 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
             rows="4"
           />
           {errors.Description && <span className="text-red-500 block text-xs mt-1">{errors.Description.message}</span>}
@@ -88,7 +88,7 @@ export default function Home() {
             type="number"
             id="amt"
             {...register('Amount', { required: 'Amount is required' })}
-            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-800 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
           />
           {errors.Amount && <span className="text-red-500 block text-xs mt-1">{errors.Amount.message}</span>}
         </div>
@@ -100,7 +100,7 @@ export default function Home() {
 
         <button
           type="submit"
-          className="mt-4 w-full rounded-md dark:bg-purple-700 bg-purple-500 py-2 font-semibold text-white transition-colors dark:hover:bg-purple-800 hover:bg-purple-600 duration-300"
+          className="mt-4 w-full rounded-md dark:bg-purple-400 bg-purple-500 py-2 font-semibold text-white transition-colors dark:hover:bg-purple-600 hover:bg-purple-600 duration-300"
         >
           Submit
         </button>
