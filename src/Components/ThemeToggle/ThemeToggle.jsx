@@ -21,7 +21,7 @@ export default function ThemeToggle() {
 
   return (
     <div>
-    <button className='dark:text-black text-black p-2 rounded text-sm dark:bg-teal-200 bg-teal-200 hover:ring-2' onClick={toggleTheme}>
+    <button className='dark:text-black text-black p-2 rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2' onClick={toggleTheme}>
       {theme === 'light' ? <FiMoon /> : <FiSun />}
     </button>
     </div>
