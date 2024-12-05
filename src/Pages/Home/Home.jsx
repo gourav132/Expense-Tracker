@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import BounceLoader from "react-spinners/ClipLoader";
-import { Navbar } from "../../Components";
+import { Navbar, Modal, InformationCard } from "../../Components";
+import axios from "axios";
 
 export default function Home() {
   const [toggleModal, setToggleModal] = useState(false);
@@ -30,6 +30,7 @@ export default function Home() {
   const onSubmit = (data) => {
     setFormData(data);
     handleModal();
+    console.log(formData);
   };
 
   const addToGoogleSheet = () => {
@@ -40,6 +41,7 @@ export default function Home() {
       body: formData,
     })
       .then((res) => {
+        recordExpense();
         reset();
         handleModal();
         setLoading(false);
@@ -50,26 +52,33 @@ export default function Home() {
       });
   };
 
+  const recordExpense = async () => {
+    try {
+      const result = await axios.post(
+        "https://vle-server.onrender.com/recordExpense",
+        {
+          date: formData.Date,
+          category: formData.Category,
+          amount: formData.Amount,
+          description: formData.Description,
+        }
+      );
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     const currentDate = new Date().toISOString().split("T")[0];
     setValue("Date", currentDate);
   }, [setValue]);
 
-  useEffect(() => {
-    fetch(process.env.REACT_APP_GOOGLE_SHEET_API)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-        console.log(data);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-
   return (
     <div className="relative flex h-screen w-full md:items-center justify-center pt-36 md:pt-0">
       <Navbar />
       <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
-        <h1 className="text-2xl font-semibold leading-9 text-center dark:text-white text-black font-Montserrat">
+        <h1 className="text-2xl font-semibold leading-9 text-center dark:text-white text-black font-Montserrat transition-colors">
           Expense journal
         </h1>
         <p className="text-sm font-medium text-gray-400 mt-1 text-center font-Montserrat">
@@ -87,10 +96,13 @@ export default function Home() {
           <select
             {...register("Category", { required: "Category is required" })}
             className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+            id="category"
           >
             <option value="">Select a category</option>
             <option value="transportation">Transportation</option>
-            <option value="transportation">Personal Transportation</option>
+            <option value="personal-transportation">
+              Personal Transportation
+            </option>
             <option value="miscellaneous">Miscellaneous</option>
           </select>
           {errors.Category && (
@@ -113,6 +125,7 @@ export default function Home() {
             })}
             className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
             rows="4"
+            id="description"
           />
           {errors.Description && (
             <span className="text-red-500 block text-xs mt-1">
@@ -150,59 +163,14 @@ export default function Home() {
           Submit
         </button>
       </form>
+      {/* <InformationCard /> */}
       {toggleModal && (
-        <div
-          id="backdrop"
-          className="absolute flex h-screen w-full items-center justify-center bg-black/90"
-          onClick={handleModal}
-        >
-          <div
-            id="card"
-            className="rounded-md border-2 dark:bg-black bg-white dark:text-white border-gray-800 px-14 py-10 z-10"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="text-xl font-semibold mb-5 font-Montserrat">
-              Confirm submission
-            </h1>
-            <p>
-              <span className="font-semibold">Date:</span> {formData.Date}
-            </p>
-            <p>
-              <span className="font-semibold">Category: </span>{" "}
-              {formData.Category}
-            </p>
-            <p>
-              <span className="font-semibold">Description: </span>{" "}
-              {formData.Description}
-            </p>
-            <p>
-              <span className="font-semibold">Amount: </span> {formData.Amount}
-            </p>
-            <div className="mt-5">
-              <button
-                className="mr-2 rounded-md bg-red-700 px-4 py-1 font-semibold text-white hover:bg-red-600 transition-colors"
-                onClick={handleModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="rounded-md bg-green-700 px-4 py-1 font-semibold text-white hover:bg-green-600 transition-colors"
-                onClick={addToGoogleSheet}
-              >
-                {loading ? (
-                  <BounceLoader
-                    color="#ffffff"
-                    size={15}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                  />
-                ) : (
-                  "Submit"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
+        <Modal
+          handleModal={handleModal}
+          formData={formData}
+          addToGoogleSheet={addToGoogleSheet}
+          loading={loading}
+        />
       )}
       <ToastContainer
         position="top-center"
