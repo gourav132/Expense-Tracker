@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
+import Navbar from "../Navbar/Navbar";
 
 export default function InformationCard() {
   const [categoryExp, setCategoryExp] = useState();
@@ -38,7 +39,8 @@ export default function InformationCard() {
       ) : (
         ""
       )}
-      <div>
+      <div className="relative flex h-screen w-full md:items-center justify-center pt-36 md:pt-0">
+        <Navbar />
         {categoryExp && (
           <div className="hidden md:block absolute bottom-10 w-full left-0">
             <div className="flex items-center justify-center gap-10 font-Montserrat">

@@ -3,9 +3,16 @@ import axios from "axios";
 import { ExpenseTable, Navbar } from "../../Components";
 import { Puff } from "react-loader-spinner";
 
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function Expenses() {
   const [expenses, setExpenses] = useState();
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState({
+    edit: false,
+    delete: false,
+  });
 
   useEffect(() => {
     const getExpenses = async () => {
@@ -22,12 +29,43 @@ export default function Expenses() {
   }, []);
 
   const handleDelete = async (id) => {
+    setStatus({ ...status, delete: true });
     try {
-      axios.delete(`http://localhost:4242/deleteRecord/${id}`);
-      console.log("Record deleted successfully");
+      await axios.delete(`https://vle-server.onrender.com/deleteRecord/${id}`);
+      setExpenses((prevExpenses) =>
+        prevExpenses.filter((expense) => expense.id !== id)
+      );
+      setStatus({ ...status, delete: false });
+      handleToasts("Record Deleted");
     } catch (error) {
       console.log("Error deleting record - ", error);
     }
+  };
+
+  const handleUpdate = async (id, updatedExpense) => {
+    // setExpenses((prevExpenses) =>
+    //   prevExpenses.map((expense) =>
+    //     expense.id === id ? updatedExpense : expense
+    //   )
+    // );
+    setStatus({ ...status, edit: true });
+    const response = await axios.put(
+      `https://vle-server.onrender.com/editRecord/${id}`,
+      {
+        date: updatedExpense.date,
+        category: updatedExpense.category,
+        amount: updatedExpense.amount,
+        description: updatedExpense.description,
+      }
+    );
+    if (response.status === 200) {
+      setStatus({ ...status, edit: false });
+      handleToasts("Record edited");
+    }
+  };
+
+  const handleToasts = (msg) => {
+    toast.success(msg);
   };
 
   return (
@@ -45,14 +83,22 @@ export default function Expenses() {
             width="80"
             color="#4fa94d"
             ariaLabel="puff-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
           />
         )}
         {!loading && (
-          <ExpenseTable expenses={expenses} handleDelete={handleDelete} />
+          <ExpenseTable
+            expenses={expenses}
+            status={status}
+            handleDelete={handleDelete}
+            handleUpdate={handleUpdate}
+          />
         )}
       </div>
+      <ToastContainer
+        position="bottom-center"
+        theme={localStorage.getItem("theme")}
+        transition={Slide}
+      />
     </div>
   );
 }

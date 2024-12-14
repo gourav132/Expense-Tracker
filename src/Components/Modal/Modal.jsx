@@ -4,8 +4,8 @@ import BounceLoader from "react-spinners/ClipLoader";
 export default function Modal({
   handleModal,
   formData,
-  addToGoogleSheet,
   loading,
+  recordExpense,
 }) {
   return (
     <div>
@@ -16,10 +16,10 @@ export default function Modal({
       >
         <div
           id="card"
-          className="rounded-xl border-2 dark:bg-black bg-white dark:text-white border-gray-800 pl-16 pr-16 pt-10 pb-10 z-10"
+          className="rounded-xl border-2 dark:bg-black bg-white/90 dark:text-white border-gray-800 pl-16 pr-16 pt-10 pb-10 z-10"
           onClick={(e) => e.stopPropagation()}
         >
-          <h1 className="text-xl font-bold mb-5 font-Montserrat text-gray-700 dark:text-gray-200">
+          <h1 className="text-xl mb-5 font-Montserrat text-gray-700 dark:text-gray-200">
             Confirm submission
           </h1>
           <p>
@@ -37,15 +37,9 @@ export default function Modal({
             <span className="font-semibold">Amount: </span> {formData.Amount}
           </p>
           <div className="mt-5">
-            {/* <button
-              className="mr-2 rounded-md bg-gray-700 px-4 py-1 font-semibold text-white hover:bg-red-600 transition-colors text-sm"
-              onClick={handleModal}
-            >
-              Cancel
-            </button> */}
             <button
-              className="rounded-md bg-purple-700 px-4 py-1 font-normal text-white hover:bg-purple-600 transition-colors text-sm w-full"
-              onClick={addToGoogleSheet}
+              className="rounded-md bg-purple-700 px-4 py-1 font-bold text-white hover:bg-purple-600 transition-colors text-sm w-full"
+              onClick={recordExpense}
             >
               {loading ? (
                 <BounceLoader

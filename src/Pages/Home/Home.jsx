@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navbar, Modal, InformationCard } from "../../Components";
+import { Navbar, Modal } from "../../Components";
 import axios from "axios";
+import { MdCurrencyRupee } from "react-icons/md";
 
 export default function Home() {
   const [toggleModal, setToggleModal] = useState(false);
   const [formData, setFormData] = useState({});
-  const [data, setData] = useState();
+
   const {
     register,
     handleSubmit,
@@ -30,31 +31,12 @@ export default function Home() {
   const onSubmit = (data) => {
     setFormData(data);
     handleModal();
-    console.log(formData);
-  };
-
-  const addToGoogleSheet = () => {
-    setLoading(true);
-    const formData = new FormData(formRef.current);
-    fetch(process.env.REACT_APP_GOOGLE_SHEET_API, {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => {
-        recordExpense();
-        reset();
-        handleModal();
-        setLoading(false);
-        handleToasts();
-      })
-      .catch((error) => {
-        console.log(error); // Handling errors
-      });
   };
 
   const recordExpense = async () => {
+    setLoading(true);
     try {
-      const result = await axios.post(
+      const response = await axios.post(
         "https://vle-server.onrender.com/recordExpense",
         {
           date: formData.Date,
@@ -63,7 +45,12 @@ export default function Home() {
           description: formData.Description,
         }
       );
-      console.log(result);
+      if (response.status === 200) {
+        setLoading(false);
+        reset();
+        handleModal();
+        handleToasts();
+      }
     } catch (err) {
       console.error(err);
     }
@@ -141,12 +128,15 @@ export default function Home() {
           >
             Amount
           </label>
-          <input
-            type="number"
-            id="amt"
-            {...register("Amount", { required: "Amount is required" })}
-            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
-          />
+          <div className="relative">
+            <MdCurrencyRupee className="absolute top-4 left-2 dark:text-gray-300 text-gray-700" />
+            <input
+              type="number"
+              id="amt"
+              {...register("Amount", { required: "Amount is required" })}
+              className="mt-1 w-80 md:w-96 rounded-md border  p-2 pl-8 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+            />
+          </div>
           {errors.Amount && (
             <span className="text-red-500 block text-xs mt-1">
               {errors.Amount.message}
@@ -158,18 +148,17 @@ export default function Home() {
 
         <button
           type="submit"
-          className="mt-4 w-full rounded-md dark:bg-purple-400 bg-purple-500 py-2 font-semibold text-white transition-colors dark:hover:bg-purple-600 hover:bg-purple-600 duration-300"
+          className="mt-4 w-full rounded-md dark:bg-purple-400 bg-purple-500 py-2 text-sm font-semibold text-white transition-colors dark:hover:bg-purple-600 hover:bg-purple-600 duration-300"
         >
-          Submit
+          SUBMIT
         </button>
       </form>
-      {/* <InformationCard /> */}
       {toggleModal && (
         <Modal
           handleModal={handleModal}
           formData={formData}
-          addToGoogleSheet={addToGoogleSheet}
           loading={loading}
+          recordExpense={recordExpense}
         />
       )}
       <ToastContainer

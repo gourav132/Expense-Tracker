@@ -2,6 +2,7 @@ import React from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { MdAdd } from "react-icons/md";
 import { FiFile } from "react-icons/fi";
+import { IoAnalyticsSharp } from "react-icons/io5";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
@@ -31,7 +32,12 @@ export default function Navbar() {
             <FiFile />
           </button>
         )}
-
+        {/* <button
+          onClick={() => navigate("/Analytics")}
+          className="dark:text-black text-black p-2 rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2"
+        >
+          <IoAnalyticsSharp />
+        </button> */}
         <ThemeToggle />
       </div>
     </div>
