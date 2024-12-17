@@ -1,4 +1,3 @@
-import { InformationCard } from "./Components";
 import { Analytics, Expenses, Home } from "./Pages";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
-import Navbar from "../Navbar/Navbar";
 import Datepicker from "react-tailwindcss-datepicker";
 
 export default function InformationCard({ filterTable }) {
@@ -11,6 +10,13 @@ export default function InformationCard({ filterTable }) {
     startDate: null,
     endDate: null,
   });
+
+  const [filters, setFilters] = useState({
+    category: "",
+    startDate: "",
+    endDate: "",
+  });
+
   useEffect(() => {
     setLoading(true);
     try {
@@ -24,6 +30,10 @@ export default function InformationCard({ filterTable }) {
     }
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    filterTable(filters.category, filters.startDate, filters.endDate);
+  }, [filters]);
 
   return (
     <div>
@@ -56,7 +66,11 @@ export default function InformationCard({ filterTable }) {
           value={dateFilter}
           onChange={(newValue) => {
             setDateFilter(newValue);
-            console.log(dateFilter);
+            setFilters({
+              ...filters,
+              startDate: newValue.startDate,
+              endDate: newValue.endDate,
+            });
           }}
           primaryColor={"purple"}
           showShortcuts={true}
@@ -71,10 +85,10 @@ export default function InformationCard({ filterTable }) {
           <div className="hidden md:block w-full">
             <div className="flex flex-col gap-2 font-Montserrat">
               <button
-                // key={}
                 className="py-2 rounded dark:bg-zinc-900 bg-gray-100 hover:bg-gray-300 dark:hover:bg-zinc-500 transition-colors w-72"
-                // onClick={() => setAllRec(!allRec)}
-                onClick={() => filterTable("")}
+                onClick={() => {
+                  setFilters({ ...filters, category: "" });
+                }}
               >
                 <h1 className="dark:text-gray-300 text-sm transition-colors text-left pl-4 ">
                   all-records
@@ -84,7 +98,9 @@ export default function InformationCard({ filterTable }) {
                 <button
                   key={category.category}
                   className="py-2 rounded dark:bg-zinc-900 bg-gray-100 hover:bg-gray-300 dark:hover:bg-zinc-500 transition-colors w-72"
-                  onClick={() => filterTable(category.category)}
+                  onClick={() => {
+                    setFilters({ ...filters, category: category.category });
+                  }}
                 >
                   <h1 className="dark:text-gray-300 text-sm transition-colors text-left pl-4 ">
                     {category.category}

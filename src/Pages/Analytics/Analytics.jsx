@@ -26,14 +26,15 @@ export default function Analytics() {
   const handleDelete = () => {};
   const handleUpdate = () => {};
 
-  const filterTable = async (category) => {
-    console.log(category);
+  const filterTable = async (category, start, end) => {
     try {
       const response = await axios.get(
         `https://vle-server.onrender.com/retrieve/`,
         {
           params: {
             category: category,
+            startDate: start,
+            endDate: end,
           },
         }
       );

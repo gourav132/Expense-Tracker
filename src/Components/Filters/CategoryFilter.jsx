@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { PulseLoader } from "react-spinners";
 import axios from "axios";
 
-export default function CategoryFilter({ filterTable, filter, setFilter }) {
+export default function CategoryFilter({ filters, setFilters }) {
   const [loading, setLoading] = useState(true);
   const [categoryExp, setCategoryExp] = useState();
 
@@ -37,9 +37,7 @@ export default function CategoryFilter({ filterTable, filter, setFilter }) {
         <div className="w-full p-2 gap-2 flex  flex-col">
           <button
             onClick={() => {
-              filterTable("").then(() => {
-                setFilter({ ...filter, category: !filter.category });
-              });
+              setFilters({ ...filters, category: "" });
             }}
             className="w-full hover:bg-white hover:dark:bg-zinc-950 py-2 rounded text-left pl-3 transition-all"
           >
@@ -49,9 +47,7 @@ export default function CategoryFilter({ filterTable, filter, setFilter }) {
             <button
               key={category.category}
               onClick={() => {
-                filterTable(category.category).then(() => {
-                  setFilter({ ...filter, category: !filter.category });
-                });
+                setFilters({ ...filters, category: category.category });
               }}
               className="w-full hover:bg-white hover:dark:bg-zinc-950 py-2 rounded text-left pl-3 transition-all"
             >

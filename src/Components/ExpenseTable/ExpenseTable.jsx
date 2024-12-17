@@ -3,9 +3,9 @@ import { BounceLoader } from "react-spinners";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiFilter } from "react-icons/fi";
 import TableRows from "./TableRows";
-import InformationCard from "../InformationCard/InformationCard";
 import CategoryFilter from "../Filters/CategoryFilter";
 import axios from "axios";
+import Datepicker from "react-tailwindcss-datepicker";
 
 export default function ExpenseTable({
   expenses,
@@ -21,6 +21,14 @@ export default function ExpenseTable({
   const [filter, setFilter] = useState({
     category: false,
   });
+
+  const [filters, setFilters] = useState({
+    category: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  const [date, setDate] = useState();
 
   // Sync editedExpenses with the latest expenses prop
   useEffect(() => {
@@ -53,21 +61,28 @@ export default function ExpenseTable({
     handleUpdate(id, updatedExpense).then(() => setEditingRow(null));
   };
 
-  const filterTable = async (category) => {
+  const filterTable = async (category, start, end) => {
     try {
       const response = await axios.get(
         `https://vle-server.onrender.com/retrieve/`,
         {
           params: {
             category: category,
+            startDate: start,
+            endDate: end,
           },
         }
       );
       setExpenses(response.data);
+      setFilter({ ...filter, category: false });
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    filterTable(filters.category, filters.startDate, filters.endDate);
+  }, [filters]);
 
   return (
     <div>
@@ -121,10 +136,26 @@ export default function ExpenseTable({
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-900 dark:text-gray-200 font-Montserrat transition-colors">
             <tr>
               <th className="px-6 py-3 flex w-full justify-between items-center gap-8">
-                <span>Date</span>
-                <button className="rounded p-2 hover:bg-gray-400 transition-colors">
-                  <FiFilter />
-                </button>
+                <div className="">
+                  <Datepicker
+                    value={date}
+                    onChange={(newValue) => {
+                      setFilters({
+                        ...filters,
+                        startDate: newValue.startDate,
+                        endDate: newValue.endDate,
+                      });
+                      setDate(newValue);
+                    }}
+                    useRange={false}
+                    showShortcuts={true}
+                    toggleClassName="hidden"
+                    containerClassName=""
+                    inputClassName="bg-transparent outline-none dark:placeholder-gray-200 dark:text-gray-200 text-gray-700 placeholder-gray-700"
+                    placeholder="DATE"
+                    separator="- To -"
+                  />
+                </div>
               </th>
               <th className="px-6 py-3">Description</th>
               <th className="px-6 py-3 flex w-full justify-between items-center relative">
@@ -142,9 +173,8 @@ export default function ExpenseTable({
                   <AnimatePresence>
                     {filter.category && (
                       <CategoryFilter
-                        filterTable={filterTable}
-                        filter={filter}
-                        setFilter={setFilter}
+                        filters={filters}
+                        setFilters={setFilters}
                       />
                     )}
                   </AnimatePresence>
