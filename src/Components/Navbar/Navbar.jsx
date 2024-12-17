@@ -3,7 +3,8 @@ import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { MdAdd } from "react-icons/md";
 import { FiFile } from "react-icons/fi";
 import { IoAnalyticsSharp } from "react-icons/io5";
-import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const location = useLocation();
@@ -18,26 +19,29 @@ export default function Navbar() {
       </h1>
       <div className="flex gap-8">
         {location.pathname === "/Exp" ? (
-          <button
+          <motion.button
+            whileTap={{ scale: 0.85 }}
             onClick={() => navigate("/")}
             className="dark:text-black text-black p-2 rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2"
           >
             <MdAdd />
-          </button>
+          </motion.button>
         ) : (
-          <button
+          <motion.button
+            whileTap={{ scale: 0.85 }}
             onClick={() => navigate("/Exp")}
             className="dark:text-black text-black p-2 rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2"
           >
             <FiFile />
-          </button>
+          </motion.button>
         )}
-        {/* <button
+        {/* <motion.button
+          whileTap={{ scale: 0.85 }}
           onClick={() => navigate("/Analytics")}
           className="dark:text-black text-black p-2 rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2"
         >
           <IoAnalyticsSharp />
-        </button> */}
+        </motion.button> */}
         <ThemeToggle />
       </div>
     </div>

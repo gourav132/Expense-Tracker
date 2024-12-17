@@ -69,10 +69,10 @@ export default function Expenses() {
   };
 
   return (
-    <div className="relative flex h-screen w-full md:items-center justify-center">
+    <div className="relative flex h-screen w-full items-center justify-center">
       <Navbar />
 
-      <div className="flex items-center justify-items-center flex-col col-span-3">
+      <div className="flex items-center justify-items-center flex-col">
         <h1 className="text-xl font-Montserrat font-semibold mb-10 dark:text-gray-200 transition-colors">
           Expenses incurred till now
         </h1>
@@ -88,6 +88,7 @@ export default function Expenses() {
         {!loading && (
           <ExpenseTable
             expenses={expenses}
+            setExpenses={setExpenses}
             status={status}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}

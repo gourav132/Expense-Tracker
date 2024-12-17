@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import Navbar from "../Navbar/Navbar";
+import Datepicker from "react-tailwindcss-datepicker";
 
-export default function InformationCard() {
+export default function InformationCard({ filterTable }) {
   const [categoryExp, setCategoryExp] = useState();
   const [loading, setLoading] = useState(true);
+  const [dateFilter, setDateFilter] = useState({
+    startDate: null,
+    endDate: null,
+  });
   useEffect(() => {
     setLoading(true);
     try {
@@ -19,6 +24,7 @@ export default function InformationCard() {
     }
     setLoading(false);
   }, []);
+
   return (
     <div>
       {loading ? (
@@ -39,18 +45,49 @@ export default function InformationCard() {
       ) : (
         ""
       )}
-      <div className="relative flex h-screen w-full md:items-center justify-center pt-36 md:pt-0">
-        <Navbar />
+      <div>
+        <h1 className="font-semibold font-Montserrat mb-2 text-gray-600 dark:text-gray-300 transition-colors">
+          Date
+        </h1>
+        <Datepicker
+          popoverDirection="down"
+          toggleClassName="hidden"
+          useRange={false}
+          value={dateFilter}
+          onChange={(newValue) => {
+            setDateFilter(newValue);
+            console.log(dateFilter);
+          }}
+          primaryColor={"purple"}
+          showShortcuts={true}
+          inputClassName="py-2 w-full rounded dark:bg-zinc-900 bg-gray-100 hover:bg-gray-300 dark:hover:bg-zinc-500 transition-colors dark:text-gray-300 text-sm text-left pl-4"
+          containerClassName="w-72 mb-10"
+          separator="-To-"
+        />
+        <h1 className="font-semibold font-Montserrat mb-2 text-gray-600 dark:text-gray-300 transition-colors">
+          Category
+        </h1>
         {categoryExp && (
-          <div className="hidden md:block absolute bottom-10 w-full left-0">
-            <div className="flex items-center justify-center gap-10 font-Montserrat">
+          <div className="hidden md:block w-full">
+            <div className="flex flex-col gap-2 font-Montserrat">
+              <button
+                // key={}
+                className="py-2 rounded dark:bg-zinc-900 bg-gray-100 hover:bg-gray-300 dark:hover:bg-zinc-500 transition-colors w-72"
+                // onClick={() => setAllRec(!allRec)}
+                onClick={() => filterTable("")}
+              >
+                <h1 className="dark:text-gray-300 text-sm transition-colors text-left pl-4 ">
+                  all-records
+                </h1>
+              </button>
               {categoryExp.map((category) => (
                 <button
                   key={category.category}
-                  className="p-4 rounded-xl dark:bg-gray-800 bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-900 transition-colors"
+                  className="py-2 rounded dark:bg-zinc-900 bg-gray-100 hover:bg-gray-300 dark:hover:bg-zinc-500 transition-colors w-72"
+                  onClick={() => filterTable(category.category)}
                 >
-                  <h1 className="dark:text-gray-300 font-semibold text-sm transition-colors">
-                    {category.category} : {category.total_amount}
+                  <h1 className="dark:text-gray-300 text-sm transition-colors text-left pl-4 ">
+                    {category.category}
                   </h1>
                 </button>
               ))}

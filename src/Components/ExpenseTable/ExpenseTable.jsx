@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { MdEdit } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
 import { BounceLoader } from "react-spinners";
+import { AnimatePresence, motion } from "framer-motion";
+import { FiFilter } from "react-icons/fi";
+import TableRows from "./TableRows";
+import InformationCard from "../InformationCard/InformationCard";
+import CategoryFilter from "../Filters/CategoryFilter";
+import axios from "axios";
 
 export default function ExpenseTable({
   expenses,
+  setExpenses,
   status,
   handleDelete,
   handleUpdate,
@@ -13,6 +18,9 @@ export default function ExpenseTable({
   const [deleteId, setDeleteId] = useState(null);
   const [editingRow, setEditingRow] = useState(null);
   const [editedExpenses, setEditedExpenses] = useState({});
+  const [filter, setFilter] = useState({
+    category: false,
+  });
 
   // Sync editedExpenses with the latest expenses prop
   useEffect(() => {
@@ -45,47 +53,64 @@ export default function ExpenseTable({
     handleUpdate(id, updatedExpense).then(() => setEditingRow(null));
   };
 
+  const filterTable = async (category) => {
+    try {
+      const response = await axios.get(
+        `https://vle-server.onrender.com/retrieve/`,
+        {
+          params: {
+            category: category,
+          },
+        }
+      );
+      setExpenses(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
-      {toggleModal && (
+      <div
+        className={`absolute top-0 left-0 h-screen w-full bg-black/80 flex justify-center items-center ${
+          toggleModal ? "" : "hidden"
+        }`}
+        onClick={handleModal}
+      >
         <div
-          className="absolute top-0 left-0 h-screen w-full bg-black/80 flex justify-center items-center"
-          onClick={handleModal}
+          className="dark:bg-black bg-black/20 text-white w-96 h-42 p-4 rounded-xl border-2 border-red-400 flex flex-col items-center shadow"
+          onClick={(e) => e.stopPropagation()}
         >
-          <div
-            className="dark:bg-black bg-black/20 text-white w-96 h-42 p-4 rounded-xl border-2 border-red-400 flex flex-col items-center shadow"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="text-xl font-semibold mb-2">Delete record?</h1>
-            <h1 className="font-semibold tracking-tighter mb-6">
-              Are you sure you want to delete this record?
-            </h1>
-            <div className="flex gap-4 justify-end">
-              <button
-                className="px-2 py-1 rounded bg-gray-500 text-sm font-semibold"
-                onClick={handleModal}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  handleDelete(deleteId).then(() => {
-                    setDeleteId(null);
-                    setToggleModal(!toggleModal);
-                  });
-                }}
-                className="py-1 rounded-sm bg-red-400 hover:bg-red-500 transition-colors text-sm font-semibold w-16 flex justify-center items-center"
-              >
-                {status.delete ? (
-                  <BounceLoader color="#ffffff" size={15} />
-                ) : (
-                  "Delete"
-                )}
-              </button>
-            </div>
+          <h1 className="text-xl font-semibold mb-2">Delete record?</h1>
+          <h1 className="font-semibold tracking-tighter mb-6">
+            Are you sure you want to delete this record?
+          </h1>
+          <div className="flex gap-4 justify-end">
+            <button
+              className="px-2 py-1 rounded bg-gray-500 text-sm font-semibold"
+              onClick={handleModal}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                handleDelete(deleteId).then(() => {
+                  setDeleteId(null);
+                  setToggleModal(!toggleModal);
+                });
+              }}
+              className="py-1 rounded-sm bg-red-400 hover:bg-red-500 transition-colors text-sm font-semibold w-16 flex justify-center items-center"
+            >
+              {status.delete ? (
+                <BounceLoader color="#ffffff" size={15} />
+              ) : (
+                "Delete"
+              )}
+            </button>
           </div>
         </div>
-      )}
+      </div>
+
       <div className="max-h-96 overflow-y-scroll no-scrollbar rounded-xl">
         <table
           border="1"
@@ -95,82 +120,52 @@ export default function ExpenseTable({
         >
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-900 dark:text-gray-200 font-Montserrat transition-colors">
             <tr>
-              <th className="px-6 py-3">Date</th>
+              <th className="px-6 py-3 flex w-full justify-between items-center gap-8">
+                <span>Date</span>
+                <button className="rounded p-2 hover:bg-gray-400 transition-colors">
+                  <FiFilter />
+                </button>
+              </th>
               <th className="px-6 py-3">Description</th>
-              <th className="px-6 py-3">Category</th>
+              <th className="px-6 py-3 flex w-full justify-between items-center relative">
+                <span>CATEGORY</span>
+
+                <div>
+                  <button
+                    onClick={() =>
+                      setFilter({ ...filter, category: !filter.category })
+                    }
+                    className="rounded p-2 hover:bg-gray-400 transition-all"
+                  >
+                    <FiFilter />
+                  </button>
+                  <AnimatePresence>
+                    {filter.category && (
+                      <CategoryFilter
+                        filterTable={filterTable}
+                        filter={filter}
+                        setFilter={setFilter}
+                      />
+                    )}
+                  </AnimatePresence>
+                </div>
+              </th>
               <th className="px-6 py-3">Amount</th>
               <th className="px-6 py-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="font-semibold font-Montserrat">
+          <motion.tbody layout className="font-Montserrat font-semibold">
             {Object.values(editedExpenses).map((expense) => (
-              <tr
+              <TableRows
                 key={expense.id}
-                className="bg-white border-b dark:bg-zinc-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-600  transition-colors"
-              >
-                <td className="Date">
-                  {new Date(expense.date).toLocaleDateString()}
-                </td>
-                <td className="Description">
-                  <input
-                    type="text"
-                    value={expense.description}
-                    onChange={(e) =>
-                      handleInputChange(
-                        expense.id,
-                        "description",
-                        e.target.value
-                      )
-                    }
-                    className="bg-transparent dark:placeholder-gray-200 placeholder-gray-700"
-                  />
-                </td>
-                <td className="Category">
-                  <select
-                    value={expense.category}
-                    onChange={(e) =>
-                      handleInputChange(expense.id, "category", e.target.value)
-                    }
-                    className="bg-transparent"
-                  >
-                    <option value="transportation">Transportation</option>
-                    <option value="personal-transportation">
-                      Personal Transportation
-                    </option>
-                    <option value="miscellaneous">Miscellaneous</option>
-                  </select>
-                </td>
-                <td className="Amount">
-                  <input
-                    type="number"
-                    value={expense.amount}
-                    onChange={(e) =>
-                      handleInputChange(expense.id, "amount", e.target.value)
-                    }
-                    className="bg-transparent dark:placeholder-gray-200 placeholder-gray-700"
-                  />
-                </td>
-                <td className="flex space-x-2">
-                  <button
-                    onClick={() => handleSave(expense.id)}
-                    className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors wrap"
-                  >
-                    {editingRow === expense.id ? (
-                      <BounceLoader color="#ffffff" size={15} />
-                    ) : (
-                      <MdEdit />
-                    )}
-                  </button>
-                  <button
-                    onClick={() => handleModal(expense.id)}
-                    className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                  >
-                    <MdDelete />
-                  </button>
-                </td>
-              </tr>
+                expense={expense}
+                handleInputChange={handleInputChange}
+                handleSave={handleSave}
+                editingRow={editingRow}
+                handleModal={handleModal}
+              />
             ))}
-          </tbody>
+          </motion.tbody>
         </table>
       </div>
     </div>

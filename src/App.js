@@ -1,5 +1,5 @@
 import { InformationCard } from "./Components";
-import { Expenses, Home } from "./Pages";
+import { Analytics, Expenses, Home } from "./Pages";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Exp" element={<Expenses />} />
-          <Route path="/Analytics" element={<InformationCard />} />
+          {/* <Route path="/Analytics" element={<Analytics />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
