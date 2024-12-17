@@ -131,7 +131,7 @@ export default function ExpenseTable({
           border="1"
           cellPadding="10"
           cellSpacing="0"
-          className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
+          className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
         >
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-900 dark:text-gray-200 font-Montserrat transition-colors">
             <tr>

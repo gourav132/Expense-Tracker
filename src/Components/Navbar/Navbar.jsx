@@ -30,7 +30,7 @@ export default function Navbar() {
           <motion.button
             whileTap={{ scale: 0.85 }}
             onClick={() => navigate("/Exp")}
-            className="dark:text-black text-black p-2 rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2"
+            className="dark:text-black text-black p-2 hidden md:block rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2"
           >
             <FiFile />
           </motion.button>

@@ -83,7 +83,7 @@ export default function Home() {
           </label>
           <select
             {...register("Category", { required: "Category is required" })}
-            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-zinc-800 dark:bg-zinc-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
             id="category"
           >
             <option value="">Select a category</option>
@@ -111,7 +111,7 @@ export default function Home() {
             {...register("Description", {
               required: "Description is required",
             })}
-            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+            className="mt-1 w-80 md:w-96 rounded-md border  p-2 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-zinc-800 dark:bg-zinc-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
             rows="4"
             id="description"
           />
@@ -135,7 +135,7 @@ export default function Home() {
               type="number"
               id="amt"
               {...register("Amount", { required: "Amount is required" })}
-              className="mt-1 w-80 md:w-96 rounded-md border  p-2 pl-8 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-gray-800 dark:bg-gray-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
+              className="mt-1 w-80 md:w-96 rounded-md border  p-2 pl-8 outline-blue-400 hover:ring-2 hover:ring-blue-300 focus:ring-0 dark:text-white dark:border-zinc-800 dark:bg-zinc-900 text-black bg-white text-sm transition-colors ease-in-out duration-300"
             />
           </div>
           {errors.Amount && (
