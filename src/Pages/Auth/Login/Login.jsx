@@ -5,6 +5,8 @@ import { FiLock } from "react-icons/fi";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { BounceLoader } from "react-spinners";
+import { useCookies } from "react-cookie";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function Login({ setLogin }) {
   const {
@@ -17,20 +19,23 @@ export default function Login({ setLogin }) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const [cookies, setCookie] = useCookies([]);
+  const { user, setUser } = useAuth();
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `https://vle-server.onrender.com/login`,
-        // `http://localhost:4242/login`,
+        `https://vle-server.onrender.com/auth/login`,
+        // `http://localhost:4242/auth/login`,
         {
           email: data.email,
           password: data.password,
         },
         { withCredentials: true }
       );
-      console.log(response.data);
+      setCookie("jwt", response.data.token);
+      setUser(response.data.token);
       reset();
     } catch (error) {
       setError(error.response.data.error);

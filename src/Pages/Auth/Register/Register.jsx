@@ -3,12 +3,8 @@ import { useForm } from "react-hook-form";
 import { HiOutlineMail } from "react-icons/hi";
 import { FiLock, FiUser } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-// import { FiUser } from "react-icons/fi";
 
 export default function Register({ setLogin }) {
-  const nav = useNavigate();
-
   const {
     register,
     handleSubmit,

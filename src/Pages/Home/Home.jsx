@@ -6,10 +6,18 @@ import { Navbar, Modal } from "../../Components";
 import axios from "axios";
 import { MdCurrencyRupee } from "react-icons/md";
 import { motion } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [toggleModal, setToggleModal] = useState(false);
   const [formData, setFormData] = useState({});
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) navigate("/Auth");
+  }, [user]);
 
   const {
     register,
@@ -44,6 +52,11 @@ export default function Home() {
           category: formData.Category,
           amount: formData.Amount,
           description: formData.Description,
+        },
+        {
+          headers: {
+            Authorization: `bearer ${user}`,
+          },
         }
       );
       if (response.status === 200) {

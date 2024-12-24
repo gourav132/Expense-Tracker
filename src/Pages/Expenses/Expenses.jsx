@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCookies } from "react-cookie";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Expenses() {
   const [cookies] = useCookies([]);
@@ -16,10 +17,13 @@ export default function Expenses() {
     delete: false,
   });
   const navigate = useNavigate();
-  // useEffect(() => {}, [cookies.jwt]);
+  const { user, setUser } = useAuth();
 
   useEffect(() => {
-    if (!cookies.jwt || cookies.jwt === undefined) navigate("/Auth");
+    if (!user) navigate("/Auth");
+  }, [user]);
+
+  useEffect(() => {
     const getExpenses = async () => {
       try {
         setLoading(true);
