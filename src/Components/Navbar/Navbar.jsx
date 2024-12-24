@@ -20,7 +20,7 @@ export default function Navbar() {
         Expense Journal
       </h1>
       <h1 className="dark:text-purple-100 block md:hidden text-purple-800 font-semibold font-Montserrat">
-        VL Enterprises
+        Exp Journal
       </h1>
       <div className="flex gap-8">
         {user && (
