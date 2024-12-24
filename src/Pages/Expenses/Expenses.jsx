@@ -2,27 +2,37 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ExpenseTable, Navbar } from "../../Components";
 import { Puff } from "react-loader-spinner";
-
+import { useNavigate } from "react-router-dom";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCookies } from "react-cookie";
 
 export default function Expenses() {
+  const [cookies] = useCookies([]);
   const [expenses, setExpenses] = useState();
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState({
     edit: false,
     delete: false,
   });
+  const navigate = useNavigate();
+  // useEffect(() => {}, [cookies.jwt]);
 
   useEffect(() => {
+    if (!cookies.jwt || cookies.jwt === undefined) navigate("/Auth");
     const getExpenses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("https://vle-server.onrender.com/");
+        const response = await axios.get("https://vle-server.onrender.com/", {
+          // const response = await axios.get("http://localhost:4242/", {
+          headers: {
+            Authorization: `bearer ${cookies.jwt}`,
+          },
+        });
         setExpenses(response.data);
         setLoading(false);
       } catch (error) {
-        console.error(error);
+        console.error(error.response.data.error);
       }
     };
     getExpenses();
@@ -31,7 +41,11 @@ export default function Expenses() {
   const handleDelete = async (id) => {
     setStatus({ ...status, delete: true });
     try {
-      await axios.delete(`https://vle-server.onrender.com/deleteRecord/${id}`);
+      await axios.delete(`https://vle-server.onrender.com/deleteRecord/${id}`, {
+        headers: {
+          Authorization: `bearer ${cookies.jwt}`,
+        },
+      });
       setExpenses((prevExpenses) =>
         prevExpenses.filter((expense) => expense.id !== id)
       );
@@ -56,6 +70,11 @@ export default function Expenses() {
         category: updatedExpense.category,
         amount: updatedExpense.amount,
         description: updatedExpense.description,
+      },
+      {
+        headers: {
+          Authorization: `bearer ${cookies.jwt}`,
+        },
       }
     );
     if (response.status === 200) {

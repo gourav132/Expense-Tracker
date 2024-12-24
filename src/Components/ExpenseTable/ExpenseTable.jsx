@@ -6,6 +6,7 @@ import TableRows from "./TableRows";
 import CategoryFilter from "../Filters/CategoryFilter";
 import axios from "axios";
 import Datepicker from "react-tailwindcss-datepicker";
+import { useCookies } from "react-cookie";
 
 export default function ExpenseTable({
   expenses,
@@ -21,14 +22,13 @@ export default function ExpenseTable({
   const [filter, setFilter] = useState({
     category: false,
   });
-
   const [filters, setFilters] = useState({
     category: "",
     startDate: "",
     endDate: "",
   });
-
   const [date, setDate] = useState();
+  const [cookies] = useCookies([]);
 
   // Sync editedExpenses with the latest expenses prop
   useEffect(() => {
@@ -70,6 +70,9 @@ export default function ExpenseTable({
             category: category,
             startDate: start,
             endDate: end,
+          },
+          headers: {
+            Authorization: `bearer ${cookies.jwt}`,
           },
         }
       );

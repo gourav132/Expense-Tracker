@@ -1,4 +1,4 @@
-import { Analytics, Expenses, Home } from "./Pages";
+import { Analytics, AuthHome, Expenses, Home, Login } from "./Pages";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Exp" element={<Expenses />} />
           {/* <Route path="/Analytics" element={<Analytics />} /> */}
+          <Route path="/Auth" element={<AuthHome />} />
         </Routes>
       </BrowserRouter>
     </div>

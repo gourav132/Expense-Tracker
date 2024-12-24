@@ -60,7 +60,7 @@ export default function TableRows({
           className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors wrap"
         >
           {editingRow === expense.id ? (
-            <BounceLoader color="#ffffff" size={15} />
+            <BounceLoader color="#ffffff" size={14} />
           ) : (
             <MdEdit />
           )}
