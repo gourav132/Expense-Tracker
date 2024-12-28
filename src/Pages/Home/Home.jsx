@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const [toggleModal, setToggleModal] = useState(false);
   const [formData, setFormData] = useState({});
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Home() {
         },
         {
           headers: {
-            Authorization: `bearer ${user}`,
+            Authorization: `bearer ${user.token}`,
           },
         }
       );

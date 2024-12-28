@@ -2,7 +2,7 @@ import React from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { MdAdd } from "react-icons/md";
 import { FiFile } from "react-icons/fi";
-import { IoAnalyticsSharp } from "react-icons/io5";
+// import { IoAnalyticsSharp } from "react-icons/io5";
 import { FiLogIn } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -60,6 +60,7 @@ export default function Navbar() {
             onClick={() => {
               setUser(null);
               removeCookie("jwt");
+              // logout();
             }}
           >
             <FiLogIn />

@@ -12,7 +12,7 @@ export default function Login({ setLogin }) {
   const {
     register,
     handleSubmit,
-    setValue,
+    // setValue,
     formState: { errors },
     reset,
   } = useForm();
@@ -35,7 +35,7 @@ export default function Login({ setLogin }) {
         { withCredentials: true }
       );
       setCookie("jwt", response.data.token);
-      setUser(response.data.token);
+      setUser(response.data);
       reset();
     } catch (error) {
       setError(error.response.data.error);

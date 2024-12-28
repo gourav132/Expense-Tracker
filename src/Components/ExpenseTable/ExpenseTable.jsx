@@ -6,7 +6,7 @@ import TableRows from "./TableRows";
 import CategoryFilter from "../Filters/CategoryFilter";
 import axios from "axios";
 import Datepicker from "react-tailwindcss-datepicker";
-import { useCookies } from "react-cookie";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ExpenseTable({
   expenses,
@@ -28,7 +28,7 @@ export default function ExpenseTable({
     endDate: "",
   });
   const [date, setDate] = useState();
-  const [cookies] = useCookies([]);
+  const { user } = useAuth();
 
   // Sync editedExpenses with the latest expenses prop
   useEffect(() => {
@@ -65,6 +65,7 @@ export default function ExpenseTable({
     try {
       const response = await axios.get(
         `https://vle-server.onrender.com/retrieve/`,
+        // `http://localhost:4242/retrieve/`,
         {
           params: {
             category: category,
@@ -72,7 +73,7 @@ export default function ExpenseTable({
             endDate: end,
           },
           headers: {
-            Authorization: `bearer ${cookies.jwt}`,
+            Authorization: `bearer ${user.token}`,
           },
         }
       );

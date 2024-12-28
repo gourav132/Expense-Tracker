@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiOutlineMail } from "react-icons/hi";
 import { FiLock, FiUser } from "react-icons/fi";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function Register({ setLogin }) {
   const {
@@ -13,8 +16,33 @@ export default function Register({ setLogin }) {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
+  const [cookies, setCookie] = useCookies([]);
+  const { user, setUser } = useAuth();
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `https://vle-server.onrender.com/auth/register`,
+        // `http://localhost:4242/auth/register`,
+        {
+          fname: data.fname,
+          lname: data.lname,
+          email: data.email,
+          password: data.password,
+        },
+        { withCredentials: true }
+      );
+      setCookie("jwt", response.data.token);
+      setUser(response.data);
+      reset();
+    } catch (error) {
+      console.log(error);
+      setError(error.response.data.error);
+    }
+    setLoading(false);
   };
   return (
     <motion.div
@@ -132,7 +160,7 @@ export default function Register({ setLogin }) {
             </span>
           )}
         </div>
-
+        <p className="text-sx text-center mt-4 text-red-500">{error}</p>
         <div className="mt-6">
           <motion.button
             whileTap={{ scale: 0.95 }}

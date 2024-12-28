@@ -17,37 +17,39 @@ export default function Expenses() {
     delete: false,
   });
   const navigate = useNavigate();
-  const { user, setUser } = useAuth();
+  const { user, setUser, authLoading } = useAuth();
 
   useEffect(() => {
     if (!user) navigate("/Auth");
   }, [user]);
 
   useEffect(() => {
-    const getExpenses = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get("https://vle-server.onrender.com/", {
-          // const response = await axios.get("http://localhost:4242/", {
-          headers: {
-            Authorization: `bearer ${cookies.jwt}`,
-          },
-        });
-        setExpenses(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error.response.data.error);
-      }
-    };
-    getExpenses();
-  }, []);
+    if (!authLoading) {
+      const getExpenses = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get("https://vle-server.onrender.com/", {
+            // const response = await axios.get("http://localhost:4242/", {
+            headers: {
+              Authorization: `bearer ${user.token}`,
+            },
+          });
+          setExpenses(response.data);
+          setLoading(false);
+        } catch (error) {
+          console.error(error.response.data.error);
+        }
+      };
+      getExpenses();
+    }
+  }, [authLoading]);
 
   const handleDelete = async (id) => {
     setStatus({ ...status, delete: true });
     try {
       await axios.delete(`https://vle-server.onrender.com/deleteRecord/${id}`, {
         headers: {
-          Authorization: `bearer ${cookies.jwt}`,
+          Authorization: `bearer ${user.token}`,
         },
       });
       setExpenses((prevExpenses) =>
@@ -77,7 +79,7 @@ export default function Expenses() {
       },
       {
         headers: {
-          Authorization: `bearer ${cookies.jwt}`,
+          Authorization: `bearer ${user.token}`,
         },
       }
     );

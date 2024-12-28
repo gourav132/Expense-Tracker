@@ -2,16 +2,22 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PulseLoader } from "react-spinners";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 export default function CategoryFilter({ filters, setFilters }) {
   const [loading, setLoading] = useState(true);
   const [categoryExp, setCategoryExp] = useState();
+  const { user } = useAuth();
 
   useEffect(() => {
     setLoading(true);
     try {
       axios
-        .get("https://vle-server.onrender.com/categoryExpense")
+        .get("https://vle-server.onrender.com/categoryExpense", {
+          headers: {
+            Authorization: `bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           setCategoryExp(res.data);
           setLoading(false);

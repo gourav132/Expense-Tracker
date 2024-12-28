@@ -19,6 +19,7 @@ export default function TableRows({
       <td className="Date">{new Date(expense.date).toLocaleDateString()}</td>
       <td className="Description">
         <input
+          name="desc"
           type="text"
           value={expense.description}
           onChange={(e) =>
@@ -29,6 +30,7 @@ export default function TableRows({
       </td>
       <td className="Category">
         <select
+          name="category"
           value={expense.category}
           onChange={(e) =>
             handleInputChange(expense.id, "category", e.target.value)
@@ -44,6 +46,7 @@ export default function TableRows({
       </td>
       <td className="Amount">
         <input
+          name="num"
           type="number"
           value={expense.amount}
           onChange={(e) =>
