@@ -1,21 +1,37 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { useAuth } from "../context/AuthContext";
+import { Puff } from "react-loader-spinner";
 
 const withAuth = (Component) => {
   return (props) => {
-    const isValid = false; // Replace with your actual authentication logic
     const navigate = useNavigate();
-    const [cookie] = useCookies();
 
-    console.log("withAuth", cookie.jwt);
+    const { user, authLoading } = useAuth();
+
     useEffect(() => {
-      if (!isValid) {
-        navigate("/Auth"); // Redirect if the user is not authenticated
+      if (!authLoading) {
+        if (!user) {
+          navigate("/Auth"); // Redirect if the user is not authenticated
+        }
       }
-    }, [isValid, navigate]);
+    }, [user, navigate, authLoading]);
 
-    if (!isValid) {
+    if (authLoading) {
+      return (
+        <div className="h-screen w-full flex items-center justify-center dark:bg-black dark:text-white">
+          <Puff
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="puff-loading"
+          />
+        </div>
+      ); // Display a loading message while auth is loading
+    }
+
+    if (!user) {
       return null; // Prevent rendering the component during the redirect
     }
 

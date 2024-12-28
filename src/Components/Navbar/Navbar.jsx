@@ -2,7 +2,7 @@ import React from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { MdAdd } from "react-icons/md";
 import { FiFile } from "react-icons/fi";
-// import { IoAnalyticsSharp } from "react-icons/io5";
+import { IoAnalyticsSharp } from "react-icons/io5";
 import { FiLogIn } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -44,13 +44,13 @@ export default function Navbar() {
             )}
           </>
         )}
-        {/* <motion.button
+        <motion.button
           whileTap={{ scale: 0.85 }}
           onClick={() => navigate("/Analytics")}
           className="dark:text-black text-black p-2 rounded text-sm dark:bg-purple-200 bg-purple-200 hover:ring-2"
         >
           <IoAnalyticsSharp />
-        </motion.button> */}
+        </motion.button>
 
         <ThemeToggle />
         {user && (

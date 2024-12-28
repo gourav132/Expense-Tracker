@@ -7,8 +7,9 @@ import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCookies } from "react-cookie";
 import { useAuth } from "../../context/AuthContext";
+import withAuth from "../../hoc/withAuth";
 
-export default function Expenses() {
+function Expenses() {
   const [cookies] = useCookies([]);
   const [expenses, setExpenses] = useState();
   const [loading, setLoading] = useState(true);
@@ -19,9 +20,9 @@ export default function Expenses() {
   const navigate = useNavigate();
   const { user, setUser, authLoading } = useAuth();
 
-  useEffect(() => {
-    if (!user) navigate("/Auth");
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) navigate("/Auth");
+  // }, [user]);
 
   useEffect(() => {
     if (!authLoading) {
@@ -128,3 +129,6 @@ export default function Expenses() {
     </div>
   );
 }
+
+const AuthExpensePage = withAuth(Expenses);
+export default AuthExpensePage;

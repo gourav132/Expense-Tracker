@@ -8,16 +8,17 @@ import { MdCurrencyRupee } from "react-icons/md";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import withAuth from "../../hoc/withAuth";
 
-export default function Home() {
+function Home() {
   const [toggleModal, setToggleModal] = useState(false);
   const [formData, setFormData] = useState({});
-  const { user } = useAuth();
+  const { user, setUser, authLoading } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) navigate("/Auth");
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) navigate("/Auth");
+  // }, [user]);
 
   const {
     register,
@@ -183,3 +184,7 @@ export default function Home() {
     </div>
   );
 }
+
+const AuthHomePage = withAuth(Home);
+
+export default AuthHomePage;

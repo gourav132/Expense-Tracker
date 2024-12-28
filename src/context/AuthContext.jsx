@@ -9,10 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [user, setUser] = useState();
   const [authLoading, setAuthLoading] = useState(true);
-  console.log("context page - ", cookies.jwt);
-  console.log(window.location.hostname);
+
   useEffect(() => {
-    setAuthLoading(true);
     const checkToken = async () => {
       if (cookies.jwt) {
         try {
@@ -31,6 +29,7 @@ export const AuthProvider = ({ children }) => {
           setAuthLoading(false);
         }
       }
+      setAuthLoading(false);
     };
     checkToken();
   }, [cookies]);
